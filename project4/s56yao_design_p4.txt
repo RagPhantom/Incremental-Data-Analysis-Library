@@ -1,0 +1,52 @@
+CLASS DESIGN
+
+The classes I implemented was Treetreed class. This class has the responsibility to maintain a tree structure based on a given country, and to manage the hash table based on a given country.
+I have not implement a new class for projcet 4 since hash map implementation is on top of my Treetreed class - a class from project 3.
+
+Private variables:
+I stored all variables listed following as private variables to prevent accidentally accessing them from outside and to obey Object-Oriented design principles:
+For project 4, here are the variables:
+An integer W represents an intermediate variable when computing the hash index. I got this W from the primary hash function, and use it in the secondary hash function.
+Storing this intermediate variable as a public variable might cause accidental access from outside to our secondary hash function. This might affect our hash table indexes and hash table statuses which are dangerous.
+A hash table Datasets* type array with pointers to each elements in the hash table.
+I use this hash table to store Datasets for all countries, with the indexing based on the primary hash function and secondary hash function.
+Storing this hash table as public will also cause the risk of modifying elements inside this. This might overwrite the indexes and making the hash table status unclear.
+A string type array storing 3 statuses for each correspond to their indexes. 
+Storing this HashTableStatus as public will also cause the risk to accidentally modifying the elements inside the status array, then the statuses for each element in Hash Table array will be unclear.
+
+Public variables:
+There aree no public variables.
+All member functions are public since I wanted to use them to access and modify the variables in my class.
+I implemented the helper function - hashProject - with a string parameter (Country_Code) to compute the primary hash function and returning the value of index.
+I implemented the helper function - hashSekai - with no parameters (since I stored W as a private variable retrieved from the function hashProject) to compute the secondary hash function and returning the value of index.
+I implemented the helper function - lookup - with a string parameter (Country_Code) to lookup the country code in the hash table
+I implemented 4 main functions as listed in the requirements with a string parameter (Country_Code) respectively to do lookup, remove, insert, and clean within the hash table and change the hash table status accordingly.
+By implementing these functions, I successfully avoid complex internal logics and build a clean interface for user to interact with.
+
+ALTERNATIVES AND JUSTIFICATION
+
+I decided to use a fixed-size array of 512 to implement my hash table since there array size is guaranteed to be smaller than 512, and we can easy to implement primary & secondary hash function based on this fix-sized array.
+
+I decided to read in data to a fixed-size array first, and then gather data from that array to form a hash table because I do not want to interfere with my implementations in project 3. This ensures that I am maintaining the successfull codes and building on top of that.
+
+I decided to use an array instead of a linkedlist to implement my hash table because it gives us O(1) runtime for insert, remove, and other functionalities.
+
+RUNTIME ANALYSIS
+
+Runtime for LOOKUP_P4 command:
+I created 3 variables at first in order to store the count, the index based on the primary hash function, and the index based on the secondary hash function. These 3 implementations all have O(1) runtime.
+Then, I started a while loop, computing the index using primary and secondary hash function each time in the loop with an O(1) runtime.
+Inside the loop, I am finding the hash table status for the computed index each time. If the status is "Empty", simply output a failure and return.
+If the status is occupied, and the country code is the same as the input country code, then print index X searches Y and return.
+Thus, if there is no collision, the overall runtime would be O(1) since 4*O(1) + O(1) = O(1) by assuming each basic statements are O(1) and ignoring the constant.
+If there are 511 collisions, the overall runtime would be O(N) since 4*O(1) + O(N) = O(N) by ignoring the smaller runtime and looping N times.
+For the avearge case,  if the hashing is uniform, then the average number of probes required will be approximately (1/a)*ln(1/(1/a)), a as a load factor.
+When the table is not full, the number of probes remains a constant regardless of how N grows, thus the expected average case is O(1).
+
+Runtime for CLEAN_P4 command:
+I used merge sort to sort the array, which has a runtime of O(Nlog(N)), and I inserted each element into the array, which has a runtime of O(N).
+Merge sort:
+Recursively splits the array into halves, creates a recursion tree with log(N) height.
+At each level of the tree, performing a "merge" operation, which takes O(N) for each level.
+Since there are log(N) levels with each level taking O(N) times, the total time complexity is O(Nlog(N)).
+Thus, my runtime is O(Nlog(N)) + O(N) = O(Nlog(N))

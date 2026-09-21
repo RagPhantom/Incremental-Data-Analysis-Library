@@ -1,0 +1,38 @@
+CLASS DESIGN
+
+The class I implemented was TimeSeries. 
+It was implemented for processing time series including year and data, and do mathemetical operations on them. 
+
+Private variables in class: capacity, length, year array, data array, column3, column4. 
+I made them private because it will prevent accidental modifications outsiden of the functions. 
+The risk of making them public is that everyone would have the access to them from outside of the class. The data might be easily ruined.
+A better way would be to write get and set functions for accessing and modifying their values. 
+
+What my class does: it stores valid years and data in two arrays. At the same time, it is able to calculate the mean for all valid data.
+Also, it is able to identify if the data is monotonic according to year, 
+and calculate the best fit slope and y-intercept if the data includes at least 2 valid data.
+
+Data protection: all data are stored in the class, people need to have access to the class in order to modify the data.
+
+ALTERNATIVES AND JUSTIFICATION
+
+I decided to write all functions inside my class instead of outside my class because it is easier to retrieve data inside the class.
+I also considered using vectors to write both arrays, but I rejected it because vectors are not allowed in our lab 1 project.
+
+RUNTIME ANALYSIS
+
+Runtime for the UPDATE command is O(N) in the worst case 
+since it needs to loop through both year array and data array to find the correct year and load data in it.
+Inside each loop, the operations are: 
+Case 1 - Update: if dataValue >= 0, search for that year. 
+The loop would run N times in the worst case, and in each loop, it would compare O(1) once, assign value O(1) once.
+Thus, in total, it is O(N).
+Case 2 - Delete: if dataValue < 0, repeat Case 1, shift all elements to left and it would shift N-1 times in the worst case. 
+Each shift would access the element O(1) once, and assign the element O(1) once.
+Thus, in total, it is O(N).
+After shifting, it needs to resize if needed. Thus, it needs to copy all elements to a new array. It is O(N).
+Thus, O(N) + O(N) + O(N) = O(N).
+Therefore, in the worst case the runtime for UPDATE is O(N).
+
+Runtime for the MONOTONIC command is O(1) in the best case when length is 0 or 1. 
+The function would return immediately since the data is not monotonic (false) when there is no data and it is monotonic (true) when there is only 1 data.

@@ -1,0 +1,44 @@
+CLASS DESIGN
+
+The classes I implemented was Treetreed class. I implemented all my member functions inside this class. This class has the responsibility to maintain a tree structure based on a given country, and initialize all countries into a graph storing connections between countries.
+I have not implement a new class for project 5 since graph implementation is on top of my Treetreed class - a class from project 3.
+
+Private variables:
+I stored all variables listed following as private variables to prevent accidentally accessing them from outside and to obey Object-Oriented design principles:
+For project 5, here are the variables:
+1. Edges - a set with tuple elements storing 3 elements inside each tuple: Series Code, Threshold, and Relation
+Storing this variable as a public variable might cause accidental writings into the set storing edge relationships between nodes. Relationships between nodes might be overwrite and therefore disturb graph connections.
+2. AdjacencyList - an unordered map with a outer map - Datasets* object (country object) - as a key to store source countries, and inner map as a value.
+For the inner map, the key is the destination country (Datasets* object), and the value is Edges mentioned above.
+Storing this variable as a public variable might cause accidental writings into the graph, such as overwriting countries or edges, this is the most dangerous incident since it may change nodes which are bases of the graph.
+3. QualifiedCountries - a vector to store countries (Datasets* objects) that satisfy the mean and threshold relationship according to the relation.
+Storing this variable as a public variable might cause accidental overwritings to qualified countries that satisfy the threshold relation, this might turn countries that are not qualified into qualified, and disturb the overall graph.
+
+Public variables:
+There are no public variables.
+All member functions are public since I wanted to use them to access and modify the variables in my class.
+I implemented the helper function - DFS - with 2 string parameters (Country_Code1 and Country_Code2) to determine if the two countries are connected by a path in the graph
+I implemented 5 main functions as listed in the requirements with parameters respectively to do initialize, update edges, check for adjacent nodes, check for path, relationship between 2 nodes within the graph implementation accordingly.
+By implementing these functions, I successfully avoid complex internal logics and build a clean interface for user to interact with.
+
+ALTERNATIVES AND JUSTIFICATION
+
+I decided to use std::set to store tuple elements instead of vectors because it does not have key and value pairs which is easier to get each element.
+
+I decided to use DFS instead of BFS to implement the path finding function between 2 nodes. The reason is that I only want to find if there is a path exist instead of exploring more possibilities (i.e. find the shortest path), thus DFS saves time in general.
+
+I decided to use an std::unordered_map with inner map instead of using std::map since unordered map is a hash table compared to a binary tree (map). Thus, my implementation has a higher speed.
+
+RUNTIME ANALYSIS
+
+Worst-case runtime for ADJACENT_P5 command:
+The runtime for my ADJACENT command is O(N) with functions used inside:
+1. lookup function: Worst case O(N) by looping N times inside to find the right hash index to put element in.
+2. std::unordered_map member function .at: Worst case O(N) by cppreference(Std::Unordered_Map::At - cppreference.com, n.d.).
+3. std::unordered_map member function .empty: All cases O(1) by cppreference(Std::Unordered_Map::Empty - cppreference.com, n.d.).
+4. loop through the inner set to print each key of the inner map (destination countries): In worst case one node is connecting to all nodes, which requires to loop through all nodes. Thus, the worst case runtime is O(N).
+In total, the runtime added up to O(N) since O(N) + O(1) + O(N) = O(N) by ignoring the constant before O(N).
+
+References:
+std::unordered_map::at - cppreference.com. (n.d.). https://en.cppreference.com/w/cpp/container/unordered_map/at
+std::unordered_map::empty - cppreference.com. (n.d.). https://en.cppreference.com/w/cpp/container/unordered_map/empty.html

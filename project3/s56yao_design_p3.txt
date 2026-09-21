@@ -1,0 +1,39 @@
+CLASS DESIGN
+
+The classes I implemented were Treetreed class and Node class inside Treetreed class.
+
+Private variables:
+I stored all variables listed following as private variables to prevent accidentally accessing them from outside and to obey Object-Oriented design principles:
+A fixed Datasets pointer array containing all countries in the Treetreed class as mentioned in the requirements.
+A counter to count the number of countries in the array to get the array size in order for me to easily loop through the array later.
+A series code when building the tree since there are other functions requiring series code when doing manipulations.
+The Node class inside Treetreed class as a basic component of my tree, it contains:
+    1. An array of the collection of pointers of all countries whose means fall within the interval of the node
+    2. The Min and Max act as boundaries of the interval of the mean for each node
+    3. Pointers to the left and right children
+    4. A pointer pointing to the Node object - the root of the tree
+
+Public variables:
+There aree no public variables.
+All member functions are public variables since I wanted to use them to access and modify the variables in my class.
+
+
+ALTERNATIVES AND JUSTIFICATION
+
+I decided to use a fixed-size array of 512 to implement my collection of all countries (Datasets objects) because the requirement guaranteed that there will be no more than 512 countries, 
+and this data structure will be easy to integrate in the future design when there are hashing requirements.
+
+I decided to separate the child of each node based on the midpoint of the interval of the node rather than the median.
+I split the interval at the midpoint (L+R)/2, and the left child takes all countries satisfy the interval [L, midpoint), the right child takes all countries satisfy the interval [midpoint, R].
+This will ensure a consistent spatial hierarchy. Then, I am splitting the nodes until a node only has a single country or multiple countries with "identical means" within a 1e-3 range.
+
+RUNTIME ANALYSIS
+
+Runtime for the LIMITS_P3 has a best-case runtime of O(log(NUM_NODES)). If country means are uniformly distributed, splitting the interval at the midpoint will divide the country means into two intervals with equally country numbers.
+Thus, the tree will end up as a perfectly balanced binary tree.
+Since LIMITS_P3 is looking for the leftmost or rightmost leaf, it needs to traverse down in a single downward path. The number of steps is equal to the height of the tree, which is log(NUM_NODES).
+Thus, the total runtime for a best-case of LIMITS_P3 is O(log(NUM_NODES)).
+
+Runtime for the LIMITS_P3 has a worst-case runtime of O(NUM_NODES). If the country means are distributed with a huge outlier, then a node with have a child with clustered means and another child with only one outlier mean.
+Thus, the tree will end up as a linked-list.
+Since LIMITS_P3 need to traverse through every node of the linked-list to get the min or max, resulting in O(NUM_NODES).
